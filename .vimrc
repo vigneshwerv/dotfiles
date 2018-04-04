@@ -4,14 +4,19 @@ set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=/usr/local/bin/fzf
+
 call vundle#begin()
 
+Plugin 'nvie/vim-flake8'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'altercation/vim-colors-solarized'
 Plugin 'roman/golden-ratio'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()
 
@@ -34,7 +39,6 @@ set ruler
 set autoindent
 set smartindent
 set cindent
-set background=dark
 set expandtab
 set smarttab
 set shiftwidth=2
@@ -62,43 +66,28 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-" Not modifying NERDTree tab views
-let g:golden_ratio_exclude_nonmodifiable = 1
+" FZF find commands
+nnoremap <leader>f :Files<Enter>
+nnoremap <leader>b :Buffer<Enter>
+imap <c-x><c-l> <plug>(fzf-complete-buffer-word)
 
-" CtrlP
-let g:ctrlp_cmd = 'CtrlP'
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-nmap <leader>cw :CtrlPCurWD<cr>
-nmap <leader>p :CtrlP<cr>
-let g:ctrlp_match_window = 'results:25'
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number
+      \ --no-heading --fixed-strings --ignore-case --follow --color "always" '.shellescape(<q-args>), 1, <bang>0)
 
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-
-" Open NERDTREE by default
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-" Other NERDTree shortcuts
-nnoremap <leader>f :NERDTreeToggle<Enter>
-nnoremap <silent> <leader>v :NERDTreeFind<CR>
-
-let NERDTreeQuitOnOpen = 1
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
-
-" The Silver Searcher
-if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-
-  " Use ag in CtrlP for listing files. Ligtning fast and respects .gitignore
-  unlet g:ctrlp_user_command
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
-endif
+" Split commands
+nnoremap <leader>v :vsplit
 
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 let g:airline_theme='minimalist'
+
+" Flake8
+autocmd FileType python map <buffer> <leader>1 :call Flake8()<CR>
+let g:flake8_show_quickfix=0
+let g:flake8_show_in_gutter=1
+" to use colors defined in the colorscheme
+highlight link Flake8_Error      Error
+highlight link Flake8_Warning    WarningMsg
+highlight link Flake8_Complexity WarningMsg
+highlight link Flake8_Naming     WarningMsg
+highlight link Flake8_PyFlake    WarningMsg
