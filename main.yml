@@ -42,20 +42,36 @@
         state: present
       when: ansible_os_family == "Darwin"
 
+    - name: Ensure ~/.config exists
+      file:
+        path: "{{ ansible_env.HOME }}/.config"
+        state: directory
+        mode: '0755'
+
     - name: Clone Doom Emacs
       git:
         repo: https://github.com/doomemacs/doomemacs
         dest: ~/.config/emacs
         depth: 1
         force: yes
-        recurse: yes
 
     - name: Copy .tmux.conf to home directory
       copy:
         src: .tmux.conf
         dest: "{{ ansible_env.HOME }}/.tmux.conf"
 
+    - name: Ensure ~/.config/ghostty exists
+      file:
+        path: "{{ ansible_env.HOME }}/.config/ghostty"
+        state: directory
+        mode: '0755'
+
     - name: Copy ghostty.config to $HOME/.config/ghostty/config
       copy:
         src: ghostty.config
+<<<<<<< Updated upstream
         dest: "{{ ansible_env.HOME }}/.config/ghostty/config"
+=======
+        dest: "{{ ansible_env.HOME }}/.config/ghostty/config"
+    
+>>>>>>> Stashed changes
