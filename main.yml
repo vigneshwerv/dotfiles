@@ -1,0 +1,57 @@
+---
+- name: Copy tmux configuration file
+  hosts: localhost
+  connection: local
+  gather_facts: true
+
+  tasks:
+    - name: Install tmux via Homebrew on macOS
+      homebrew:
+        name: tmux
+        state: present
+      when: ansible_os_family == "Darwin"
+
+    - name: Install fd via Homebrew on macOS
+      homebrew:
+        name: fd
+        state: present
+      when: ansible_os_family == "Darwin"
+
+    - name: Install fzf via Homebrew on macOS
+      homebrew:
+        name: fzf
+        state: present
+      when: ansible_os_family == "Darwin"
+
+    - name: Install ripgrep via Homebrew on macOS
+      homebrew:
+        name: ripgrep
+        state: present
+      when: ansible_os_family == "Darwin"
+
+    # Install emacs-plus after tapping d12frosted/emacs-plus
+    - name: Tap d12frosted/emacs-plus
+      homebrew:
+        name: emacs-plus
+        tap: d12frosted/emacs-plus
+        state: present
+      when: ansible_os_family == "Darwin"
+
+    - name: Install emacs-plus via Homebrew on macOS
+      homebrew:
+        name: emacs-plus@30
+        state: present
+      when: ansible_os_family == "Darwin"
+
+    - name: Clone Doom Emacs
+      git:
+        repo: https://github.com/doomemacs/doomemacs
+        dest: ~/.config/emacs
+        depth: 1
+        force: yes
+        recurse: yes
+
+    - name: Copy .tmux.conf to home directory
+      copy:
+        src: .tmux.conf
+        dest: "{{ ansible_env.HOME }}/.tmux.conf"
