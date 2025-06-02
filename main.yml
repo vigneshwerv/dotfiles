@@ -69,9 +69,5 @@
     - name: Copy ghostty.config to $HOME/.config/ghostty/config
       copy:
         src: ghostty.config
-<<<<<<< Updated upstream
-        dest: "{{ ansible_env.HOME }}/.config/ghostty/config"
-=======
         dest: "{{ ansible_env.HOME }}/.config/ghostty/config"
     
->>>>>>> Stashed changes
