@@ -55,3 +55,9 @@
       copy:
         src: .tmux.conf
         dest: "{{ ansible_env.HOME }}/.tmux.conf"
+
+    - name: Copy ghostty.config to $HOME/.config/ghostty/config
+      copy:
+        src: ghostty.config
+        dest: "{{ ansible_env.HOME }}/.config/ghostty/config"
+    
