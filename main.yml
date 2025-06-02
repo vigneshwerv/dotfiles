@@ -59,4 +59,3 @@
       copy:
         src: ghostty.config
         dest: "{{ ansible_env.HOME }}/.config/ghostty/config"
-    
