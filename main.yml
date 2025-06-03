@@ -1,5 +1,5 @@
 ---
-- name: Copy tmux configuration file
+- name: Setup vigneshwerv's dev environment
   hosts: localhost
   connection: local
   gather_facts: true
